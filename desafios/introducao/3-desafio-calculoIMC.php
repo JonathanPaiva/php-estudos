@@ -15,7 +15,10 @@ $peso = 84.00;
 $altura = 1.75; 
 $resultado = $peso / ($altura * $altura);
 
-if ($resultado >= 18.5 && $resultado <=24.9){
+if ($resultado < 18.5){
+    $mensagem = " - Abaixo do Peso";
+    
+}elseif ($resultado >= 18.5 && $resultado <=24.9){
     $mensagem = " - Peso Normal";
 
 } elseif ($resultado >= 25 && $resultado <=29.9){
