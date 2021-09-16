@@ -3,7 +3,7 @@
 //Declarações de Sub Rotinas sem retorno
 function exibeMensagem($mensagem)
 {
-    echo $mensagem . PHP_EOL;
+    echo $mensagem . '<br>'; //PHP_EOL;
 }
 
 //Declarações de funções com retorno de dados 
@@ -50,4 +50,11 @@ function titularComLetrasMaiusculas(array &$conta)
 {
     $conta['titular'] = mb_strtoupper($conta['titular']);
 
+}
+
+//misturar códigos php com html com foco pra exibir informações no navegador
+function exibeConta(array $conta)
+{
+    ['titular' => $titular, 'saldo' => $saldo] = $conta;
+    echo "<li>Titular: $titular. Saldo: $saldo</li>";
 }

@@ -57,12 +57,50 @@ titularComLetrasMaiusculas($contasCorrentes['123.256.789-12']);
 
 //função 'unset' remove variáveis da memória, fazendo assim com que elas não aparecam mais na listagem disponíveis para visualização.
 unset($contasCorrentes['123.456.789-11']);
-
+/*
 foreach ($contasCorrentes as $cpf => $conta) {
 
     //pode ser feito uma forma mais simples pra capturar dados de um array
     list('titular' => $titular, 'saldo' => $saldo) = $conta;
     
-    exibeMensagem("$cpf - $titular - Saldo: ");
+    exibeMensagem("$cpf - $titular - Saldo: $saldo");
 }
+*/
 
+/*
+foreach ($contasCorrentes as $cpf => $conta) {
+    exibeConta($conta);
+}
+*/
+
+//expressão abaixo terminar de usar códigos em php
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contas Correntes</title>
+</head>
+<body>
+    <h1>Contas Correntes</h1>
+    <dl>
+       <?php foreach($contasCorrentes as $cpf => $conta) { ?>
+
+            <dt>
+                <h3> 
+                    <?= $conta['titular']; ?> - <?= $cpf; ?> 
+                </h3>
+            </dt>
+            
+            <dd>
+                Saldo: <?= $conta['saldo']; ?>
+            </dd>
+
+        <?php } ?>
+
+    </dl>
+</body>
+</html>

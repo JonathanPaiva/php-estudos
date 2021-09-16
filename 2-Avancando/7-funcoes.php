@@ -2,8 +2,8 @@
 
 //Declarações de Sub Rotinas sem retorno
 function exibeMensagem($mensagem)
-{
-    echo $mensagem . PHP_EOL;
+{              //quebra de linha no html
+    echo $mensagem . '<br>';
 }
 
 //Declarações de funções com retorno de dados 
