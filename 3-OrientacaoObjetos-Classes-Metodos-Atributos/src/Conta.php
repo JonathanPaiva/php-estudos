@@ -13,10 +13,14 @@ class Conta
     private string $cpfTitular;
     private string $nomeTitular;
     private float $saldo = 0;
+    //Atributos static's servem para acessar informações em depender do objeto em questão, diretamente da classe 'Conta'
+    private static $numeroDeContas = 0;
     
     /*
     Método '__construct' define argumentos padrões para a classe, sendo assim, obrigando ou não(depende dos parâmetros passados) a ser preenchido os dados ao definir o new Conta(param1, param2)
+    é executado ao iniciar a classe.
     */
+
     public function __construct(string $cpfTitular, string $titular)
     {
         $this->cpfTitular = $cpfTitular;
@@ -25,6 +29,20 @@ class Conta
         $this->nomeTitular = $titular;
         
         $this->saldo = 0;
+
+        //o uso de 'self::' acessar os atributos e métodos static da classe, 'Conta::' Exemplo de uso para incrementar a quantidade de contas adicionadas
+        self::$numeroDeContas++;
+    }
+
+    //Método é executado quando uma instância deixa de existir 
+    public function __destruct()
+    {
+        self::$numeroDeContas--;
+    }
+
+    public static function getNumeroDeContas():int  
+    {
+        return self::$numeroDeContas;
     }
 
     private function validarNomeTitular(string $nomeTitular)
