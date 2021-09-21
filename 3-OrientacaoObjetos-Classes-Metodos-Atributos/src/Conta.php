@@ -10,8 +10,7 @@ class Conta
 
     //definir dados da conta
     //Pode ser definido valores iniciais para as variáveis dos objetos.
-    private string $cpfTitular;
-    private string $nomeTitular;
+    private $titular;
     private float $saldo = 0;
     //Atributos static's servem para acessar informações em depender do objeto em questão, diretamente da classe 'Conta'
     private static $numeroDeContas = 0;
@@ -21,12 +20,9 @@ class Conta
     é executado ao iniciar a classe.
     */
 
-    public function __construct(string $cpfTitular, string $titular)
+    public function __construct(Titular $titular)
     {
-        $this->cpfTitular = $cpfTitular;
-
-        $this-> validarNomeTitular($titular);
-        $this->nomeTitular = $titular;
+        $this->titular = $titular;
         
         $this->saldo = 0;
 
@@ -43,14 +39,6 @@ class Conta
     public static function getNumeroDeContas():int  
     {
         return self::$numeroDeContas;
-    }
-
-    private function validarNomeTitular(string $nomeTitular)
-    {
-        if (strLen($nomeTitular) < 5){
-            echo "Nome precisa ter mais de 5 caracteres.";
-            exit();
-        }
     }
 
     /*
