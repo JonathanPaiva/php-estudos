@@ -1,8 +1,9 @@
 <?php
 
+namespace Alura\Banco\Modelo;
+
 class Endereco 
 {
-
     private string $cidade;
     private string $bairro;
     private string $rua;
@@ -35,5 +36,4 @@ class Endereco
     {
         return $this->numero;
     }
-
 }

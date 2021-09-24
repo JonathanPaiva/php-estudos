@@ -1,9 +1,20 @@
 <?php
 
+/*
+Com o uso de require_once em todos os arquivos ficaria inviável de ser descrito todos os arquivos necessários na ordem correta num projeto maior. Então pode ser utilizado uma função para capturar o nameSpace de cada arquivo e assim executa-lo corretamente.
+
 require_once '3-OrientacaoObjetos-Classes-Metodos-Atributos\src\Endereco.php';
-require_once '3-OrientacaoObjetos-Classes-Metodos-Atributos\src\Titular.php';
+require_once '3-OrientacaoObjetos-Classes-Metodos-Atributos\src\Modelo\Conta\Titular.php';
 require_once '3-OrientacaoObjetos-Classes-Metodos-Atributos\src\CPF.php';
-require_once '3-OrientacaoObjetos-Classes-Metodos-Atributos\src\Conta.php';
+require_once '3-OrientacaoObjetos-Classes-Metodos-Atributos\src\Modelo\Conta\Conta.php';
+*/
+
+require_once 'autoload.php';
+
+use Alura\Banco\Modelo\Conta\Titular;
+use Alura\Banco\Modelo\Endereco;
+use Alura\Banco\Modelo\CPF;
+use Alura\Banco\Modelo\Conta\Conta;
 
 $end1 = new Endereco("Cidade Teste","Bairro Teste", "Rua Teste","123");
 $titular1 = new Titular(new CPF("123.456.789-10"),"Teste de Cliente",$end1);
