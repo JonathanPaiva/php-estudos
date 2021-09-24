@@ -2,7 +2,7 @@
 
 namespace Alura\Banco\Modelo\Conta;
 
-class Conta
+abstract class Conta
 {
     /*
     Para usar a classe de 'Conta' precisa-se definir alguns pontos: 
@@ -13,7 +13,7 @@ class Conta
     //definir dados da conta
     //Pode ser definido valores iniciais para as variáveis dos objetos.
     private $titular;
-    private float $saldo = 0;
+    protected float $saldo = 0;
     //Atributos static's servem para acessar informações em depender do objeto em questão, diretamente da classe 'Conta'
     private static $numeroDeContas = 0;
     
@@ -57,6 +57,9 @@ class Conta
 
     public function sacar(float $valorASacar): void
     {
+        $tarifaSaque = $valorASacar * $this->percentualTarifa();
+        $valorSaque = $valorASacar + $tarifaSaque;
+
         /*
         A variável '$this' utilizada aqui é uma referência para o Objeto que a chamou, ou seja: 
         $primeiraConta = new Conta();
@@ -67,12 +70,12 @@ class Conta
         É utilizado o endereço de referência do objeto da classe, onde as funções dentro deles são denominadas como 'Métodos'
         $this se refere ao objeto que "chamou" o método
         */
-        if ($valorASacar > $this->saldo){
+        if ($valorSaque > $this->saldo){
             echo "Saldo Insuficiente";
             return;
         } 
         
-        $this->saldo -= $valorASacar;
+        $this->saldo -= $valorSaque;
     }
 
     public function depositar(float $valorADepositar): void
@@ -83,23 +86,6 @@ class Conta
         } 
         
         $this->saldo += $valorADepositar;
-    }
-    
-    public function transferir(float $valorATransferir, Conta $contaDestino): void
-    {
-        /*
-        Em boas práticas é melhor evitar o uso de 'else' sendo assim pode ser feito um retorno de função vazio, como descrito no códiog abaixo. 
-        Só será excutado os demais códigos caso não entre no critério da validação.
-        */
-        if ($valorATransferir>$this->saldo){
-            echo "Saldo Indisponível";
-            return;
-        }
-
-        $this->sacar($valorATransferir);
-        
-        $contaDestino->depositar($valorATransferir);
-
     }
 
     public function getSaldo(): float
@@ -117,4 +103,6 @@ class Conta
         return $this->nomeTitular;
     }
 
+    abstract protected function percentualTarifa() : float;
+    
 }
