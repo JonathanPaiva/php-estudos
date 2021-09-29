@@ -10,9 +10,3 @@ $autenticador = New Autenticador();
 $diretor = new Diretor(new CPF("445.556.667-11"),"Joao da Silva",10000);
 
 $autenticador->tentarLogin($diretor, "11445");
-
-
-
-
-
-
