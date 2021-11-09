@@ -1,6 +1,7 @@
 <?php
 
 require 'Calculadora.php';
+require 'ArraysUtils.php';
 
 //Configuração padrão, o uso do array poderia ser feito para armazenar as informações das notas, segue exemplos abaixo dos comentários. 
 /*
@@ -54,3 +55,67 @@ if ($media) {
 } else {
     echo "Não foi possível calcular a média";
 }
+
+echo "<p>------------------------------------------------</p>";
+
+//uso de arrays para exibição de saldos, ordenação de array
+$saldos = [
+    2500,
+    3000,
+    1000,
+    3700,
+    9000
+];
+
+echo "<pre>";
+
+foreach ($saldos as $saldo) {
+    echo "<p> O Saldo é: R$ $saldo </p>";
+}
+
+//Função "sort" serve para ordenar do menor ao maior dentro de um array
+sort($saldos);
+
+echo "Menor Saldo é: R$ $saldos[0]";
+
+echo "</pre>";
+
+echo "<p>------------------------------------------------</p>";
+
+//transformar strings em arrays e arrys em strings
+$nomes = "Giovanni, João, Maria, Pedro";
+
+//Função converte uma string em array, necessário setar o separador e a string origem.
+$arraysNomes = explode(", ",$nomes);
+
+//Apenas para checar se a informação estava correta
+//var_dump($arraysNomes);
+
+foreach ($arraysNomes as $nome) {
+    echo "<p> Olá, $nome </p>";
+}
+
+$nomesJuntos = implode(",",$arraysNomes);
+
+Echo "Nomes Juntos: $nomesJuntos";
+
+echo "<p>------------------------------------------------</p>";
+
+$correntistas_e_compras = [
+    "Giovanni",
+     12,
+    "Maria",
+     25,
+    "Luis",
+    "Luísa",
+    "12"
+    ];
+
+//necessário os '::' devido a ser uma função estática
+ArraysUtils::remover("Giovanni",$correntistas_e_compras);
+
+echo "<pre>";
+var_dump($correntistas_e_compras);
+echo "</pre>";
+
+echo "<p>------------------------------------------------</p>";
