@@ -1,5 +1,7 @@
 <?php 
 
+namespace Alura;
+
 class Calculadora
 {
 

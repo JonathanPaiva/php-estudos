@@ -1,5 +1,7 @@
-<?php 
+<?php
 declare(strict_types=1);
+
+namespace Alura;
 
 //a declaração declare(strict_types=1); impede a conversão automática dos atributos dos métodos, no caso do atributo int sendo passado num parâmetro sendo string.
 

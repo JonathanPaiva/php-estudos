@@ -1,7 +1,13 @@
 <?php
 
+namespace Alura;
+
+require 'autoload.php';
+
+/* Não é necessário o uso do require quando se configura o autoloader
 require 'Calculadora.php';
 require 'ArraysUtils.php';
+*/
 
 //Configuração padrão, o uso do array poderia ser feito para armazenar as informações das notas, segue exemplos abaixo dos comentários. 
 /*
