@@ -27,4 +27,18 @@ class ArraysUtils
             echo "Não foi encontrado o elemento!";
         }
     }
+
+    public static function getContasMaiorSaldo(int $saldo , array $array): array
+    {
+        $contasComSaldoMaior = array();
+
+        foreach ($array as $chave => $valor){
+            if ($valor>$saldo){
+                $contasComSaldoMaior[] = $chave;
+            }
+        }
+        
+        return $contasComSaldoMaior;
+    }
+
 }

@@ -125,3 +125,75 @@ var_dump($correntistas_e_compras);
 echo "</pre>";
 
 echo "<p>------------------------------------------------</p>";
+
+//Arrays Associativos
+$correntistas = ["Giovanni","João","Maria","Luis","Luisa","Rafael"];
+  
+$correntistasNaoPagantes = ["Luis","Luisa","Rafael"];
+
+//'array_diff mostra o que tem de deferente entre os arrays passados por parâmetro
+$correntistasPagantes = array_diff($correntistas, $correntistasNaoPagantes);
+
+echo "<pre>";
+var_dump($correntistasPagantes);
+echo "</pre>";
+
+echo "<p>------------------------------------------------</p>";
+
+$correntistasContas = [
+    "Giovanni","João","Maria","Luis","Luisa","Rafael"];
+  
+  $saldosContas = [2500,3000,4400,1000,8700,9000];
+
+//'array_merge une os arrays passados, um abaixo do outro.
+$arrayJuntos = array_merge($correntistasContas, $saldosContas);
+
+echo "<pre>";
+var_dump($arrayJuntos);
+echo "</pre>";
+
+echo "<p>------------------------------------------------</p>";
+
+//'array_combine serve para criar um associação entre dois arrays, onde o primeiro será a chave e o segundo o valor. 
+$arraysRelacionados = array_combine($correntistasContas, $saldosContas);
+
+echo "<pre>";
+var_dump($arraysRelacionados);
+echo "</pre>";
+
+echo "<pre>";
+echo $arraysRelacionados["Giovanni"];
+echo "</pre>";
+
+$arraysRelacionados["Matheus"] = 4500;
+
+echo "<pre>";
+var_dump($arraysRelacionados);
+echo "</pre>";
+
+echo "<pre>";
+//array_key_exists serve para verificar se uma chave existe dentro de um array.
+if (array_key_exists("João", $arraysRelacionados)){
+    echo "Saldo do João é: {$arraysRelacionados["João"]}";
+} else {
+    echo "Não Encontrado";
+}
+echo "</pre>";
+echo "<p>------------------------------------------------</p>";
+
+//pode ser feito um array associativo com a expressão abaixo.
+$arrayAssociativo = ["Giovanni"=>2500,
+                     "João"=>3000,
+                     "Maria"=>4500];
+
+echo "<pre>";
+var_dump($arrayAssociativo);
+echo "</pre>";
+echo "<p>------------------------------------------------</p>";
+
+//apenas para capturar dentre um array determinados valores
+echo "<pre>";
+$contasMaiores = ArraysUtils::getContasMaiorSaldo(3000,$arraysRelacionados);
+var_dump($contasMaiores);
+echo "</pre>";
+echo "<p>------------------------------------------------</p>";
