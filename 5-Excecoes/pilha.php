@@ -7,7 +7,9 @@ function funcao1()
     try {
         funcao2();
     //pode ser utilizado multi catch, utilizando o 'pipe' para separar os erros ou exceções
-    } catch ( RuntimeException | DivisionByZeroError $erroOuExcecao) {
+    //pode ser utilizado a classe 'Throwable - assim captura todas as exceptions ou error
+    //} catch ( RuntimeException | DivisionByZeroError $erroOuExcecao) {
+    } catch (Throwable $erroOuExcecao) {
         //Tratamento de erros ou excessões, exibindo a mensagem padrão, linha e caminho. 
         echo $erroOuExcecao->getMessage() . PHP_EOL;
         echo $erroOuExcecao->getLine() . PHP_EOL;
@@ -20,6 +22,7 @@ function funcao1()
         0,
         $erroOuExcecao
     );
+    //Exceções podem ser verificadas na documentação - https://www.php.net/manual/pt_BR/spl.exceptions.php
 
     echo 'Saindo da função 1' . PHP_EOL;
 }

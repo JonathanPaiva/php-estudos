@@ -4,9 +4,9 @@ namespace Alura\Banco\Modelo\Conta;
 
 abstract class Conta
 {
-    private $titular;
-    protected $saldo;
-    private static $numeroDeContas = 0;
+    private Titular $titular;
+    protected float $saldo;
+    private static int $numeroDeContas = 0;
 
     public function __construct(Titular $titular)
     {
@@ -26,8 +26,12 @@ abstract class Conta
         $tarifaSaque = $valorASacar * $this->percentualTarifa();
         $valorSaque = $valorASacar + $tarifaSaque;
         if ($valorSaque > $this->saldo) {
-            echo "Saldo indisponível";
-            return;
+            //echo "Saldo indisponível";
+            //return;
+
+            //pode ser utilizado a classe de exceção criada para o código ficar mais robusto para poder ser passado situações e exceções que possam ocorrer.
+            throw new SaldoInsuficienteException($valorASacar, $this->saldo);
+
         }
 
         $this->saldo -= $valorSaque;
