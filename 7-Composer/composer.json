@@ -1,0 +1,17 @@
+{
+    "name": "jonathanpaiva/buscador-cursos",
+    "description": "Aula Buscador de Cursos da Alura",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Jonathanpaiva\\BuscadorCursos\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Jonathan Paiva",
+            "email": "jonathan.paiva.m@hotmail.com"
+        }
+    ],
+    "require": {}
+}
