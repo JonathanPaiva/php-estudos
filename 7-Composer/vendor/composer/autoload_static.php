@@ -31,6 +31,10 @@ class ComposerStaticInit4422117d5f6dc5bc2407ead7e225f783
             'Psr\\Http\\Message\\' => 17,
             'Psr\\Http\\Client\\' => 16,
         ),
+        'J' => 
+        array (
+            'Jonathanpaiva\\BuscadorCursos\\' => 29,
+        ),
         'G' => 
         array (
             'GuzzleHttp\\Psr7\\' => 16,
@@ -72,6 +76,10 @@ class ComposerStaticInit4422117d5f6dc5bc2407ead7e225f783
         'Psr\\Http\\Client\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/http-client/src',
+        ),
+        'Jonathanpaiva\\BuscadorCursos\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src',
         ),
         'GuzzleHttp\\Psr7\\' => 
         array (
