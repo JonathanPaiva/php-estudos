@@ -2,16 +2,27 @@
     "name": "jonathanpaiva/buscador-cursos",
     "description": "Aula Buscador de Cursos da Alura",
     "type": "library",
-    "autoload": {
-        "psr-4": {
-            "Jonathanpaiva\\BuscadorCursos\\": "src/"
-        }
-    },
     "authors": [
         {
             "name": "Jonathan Paiva",
             "email": "jonathan.paiva.m@hotmail.com"
         }
     ],
-    "require": {}
+    "require": {
+        "guzzlehttp/guzzle": "^7.4",
+        "symfony/dom-crawler": "^4.2",
+        "symfony/css-selector": "^5.3"
+    },
+    "autoload":{
+        "classmap": [
+            "./Teste.php"
+        ],
+        "files": [
+            "./functions.php"
+        ],
+        "psr-4":{
+            "Alura\\BuscadorDeCursos\\": "src/",
+            "Jonathanpaiva\\BuscadorCursos\\": "src/"
+        }
+    }
 }
