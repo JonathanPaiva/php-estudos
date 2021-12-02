@@ -4,7 +4,6 @@ namespace Alura\BuscadorDeCursos;
 
 //require 'vendor/autoload.php';
 
-use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use Symfony\Component\DomCrawler\Crawler;
 

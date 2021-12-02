@@ -1,0 +1,62 @@
+/* link do composer
+https://getcomposer.org/
+
+*** comandos iniciais *** 
+    composer --version
+    composer init
+    composer update
+    composer dumpautoload => Atualizar o arquivo de autoloade do composer;
+
+    composer require --dev phpunit/phpunit => utilizado apenas para ambiente de desenvolvimento, assim ao ser encaminhado para produção não seria encaminhado a dependência.
+
+    composer install --no-dev => com o comando ao lado, vai ser feito a instalação das dependências normalmente, porém as questão estão classificadas como dev no composer.json não entrariam na instalação.
+
+Repositório Principal onde o Composer busca os seus pacotes
+http://packagist.org
+
+** também é possível fazer com que ele busque pacotes em outros lugares, como do seu próprio GitHub, do repositório privado da sua empresa **
+
+Vamos usar de exemplo um 'http client' e 'dom crawler'
+https://packagist.org/packages/guzzlehttp/guzzle 
+https://packagist.org/packages/symfony/dom-crawler
+
+
+pode ser utilizado informações sobre pacotes para auxiliar no desenvolvimento, então assim podem ser utilizado comandos para poder utilizados pacotes específicos para determinadas ações
+    Exemplos: 
+        > Verificar identação no código do projeto
+            - PHP CodeSniffer
+                :pode ser instalado via composer:
+                    - composer require --dev squizlabs/php_codesniffer
+                        ('--dev' lança os pacotes como outro tipo, podendo em produção ser negado a instalação dos mesmos.)
+                    - por padrão fica na pasta > vendor\bin\phpcs
+                        :pode ser utilizado o comando:
+                        vendor\bin\phpcs --help
+                        * Visualizando todos os comandos disponíveis com o pacote.
+                    - com o comando: vendor\bin\phpcs --standard=PSR12 src\ 
+                    pode ser verificado erros no padrão de projeto PSR12, assim podendo ser feito a correção necessária para se enquadrar no padrão.
+
+            link padrão de projeto PSR12 - https://www.php-fig.org/psr/psr-12/
+
+        > Verificar erros na codificação
+            - Phan 
+                :pode ser utilizada para encontrar erros no código:
+                    - composer require --dev phan/phan
+                        ('--dev' lança os pacotes como outro tipo, podendo em produção ser negado a instalação dos mesmos.)
+                    - Pacores irão estar dentro da pasta 'vendor\bin'
+                    - Pode ser visualizado os comandos que pode ser executados via composer Phan
+                        * vendor\bin\phan --help
+                    - Para ser executado a analise com o pacote, pode ser inserido o camando seguinte: 
+                        vendor\bin\phan --allow-polyfill-parser [arquivo ou pasta]
+
+                        * --allow-polyfill-parser - comando faz com que não seja necessário extensão ASTs estarem ativadas.
+
+                    - Necessário a criação de um diretório com o nome '.phan' na pasta do projeto autal 
+                        * Criar um arquivo 'config.php'
+                            = onde seria passado quais dependencias seriam necessarias para validar os arquivos e quais plugins seriam utilizados. 
+
+
+Composer nos permite criar comandos, para ser executado as analises de código/identação de seus pacotes adicionados. 
+    Ex: composer test / composer phan / composer phpcs
+
+
+*/
