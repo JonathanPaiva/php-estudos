@@ -9,6 +9,9 @@ https://getcomposer.org/
     composer update
     composer dumpautoload => Atualizar o arquivo de autoloade do composer;
 
+    composer require --dev phpunit/phpunit => utilizado apenas para ambiente de desenvolvimento, assim ao ser encaminhado para produção não seria encaminhado a dependência.
+
+    composer install --no-dev => com o comando ao lado, vai ser feito a instalação das dependências normalmente, porém as questão estão classificadas como dev no composer.json não entrariam na instalação.
 
 Repositório Principal onde o Composer busca os seus pacotes
 http://packagist.org

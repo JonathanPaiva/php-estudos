@@ -3,6 +3,7 @@
 require 'vendor/autoload.php';
 //require 'src/Buscador.php';
 
+/*
 Teste::metodoTeste();
 
 Teste2::metodoTeste2();
@@ -10,12 +11,14 @@ Teste2::metodoTeste2();
 exibirMensagem();
 
 exit();
+*/
 
 use Alura\BuscadorDeCursos\Buscador;
 use GuzzleHttp\Client;
 use Symfony\Component\DomCrawler\Crawler;
 
-$cliente = new Client(['base_uri'=>'https://www.alura.com.br/']);
+$cliente = new Client(['base_uri'=>'https://www.alura.com.br/',
+                        'verify'=> false]);
 $crawler = new Crawler();
 
 $buscador = new Buscador($cliente, $crawler);
