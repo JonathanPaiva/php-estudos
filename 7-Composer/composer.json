@@ -40,7 +40,7 @@
             "@cs",
             "@test"
         ],
-     
+
         "post-update-cmd": [
             "@test"
         ]
@@ -49,5 +49,10 @@
 
     "scripts-descriptions": {
         "check": "Executa analise nos códigos via: PHPUnit, PHPCS, PHAN"
-    }
+    },
+
+    "license": "GPL-3.0",
+
+    "bin": ["buscador-cursos.php"]
+    
 }

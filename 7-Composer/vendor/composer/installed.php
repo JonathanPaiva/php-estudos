@@ -5,7 +5,7 @@
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '3e102bf23cc744993883e7aa68769a0ceee08511',
+        'reference' => 'e8609015d1346ce3af5bad4909147aa1c2101550',
         'name' => 'jonathanpaiva/buscador-cursos',
         'dev' => true,
     ),
@@ -79,7 +79,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '3e102bf23cc744993883e7aa68769a0ceee08511',
+            'reference' => 'e8609015d1346ce3af5bad4909147aa1c2101550',
             'dev_requirement' => false,
         ),
         'microsoft/tolerant-php-parser' => array(

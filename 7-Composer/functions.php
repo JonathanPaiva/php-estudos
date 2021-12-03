@@ -1,6 +1,6 @@
 <?php 
 
-function exibirMensagem()
+function exibirMensagem($msg)
 {
-    echo "Exibir mensagem teste";
+    echo $msg . PHP_EOL;
 }

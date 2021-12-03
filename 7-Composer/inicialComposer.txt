@@ -109,4 +109,14 @@ Composer nos permite criar comandos, para ser executado as analises de código/i
             Dessa forma, executando o compando 'Composer update' - será executado pós finalização do update o script 'test' incluído no composer.json
 
 
+    > Referente ao versionamento - necessário utilizar o padrão '1.0.0' - podemos upar os dados para o git, logando na conta normal, criando uma branch nova, via comandos padrões. 
+    https://getcomposer.org/doc/articles/versions.md
+    
+    > Podemos adicionar também a esse repositório público no 'Packagist' 
+        Logar na conta normal, adicionar novo pacote no seu perfil e incluir o link do repositório público do git. 
+        
+    > Referente e repositório do git e no packagist necessário incluir uma licença no composer.json e um readme.md
+        - o packgist vai capturar a linceça utilizada 
+        - ler o readme e exibir como documentação do projeto
+
 */
