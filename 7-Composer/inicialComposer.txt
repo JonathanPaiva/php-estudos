@@ -58,5 +58,55 @@ pode ser utilizado informações sobre pacotes para auxiliar no desenvolvimento,
 Composer nos permite criar comandos, para ser executado as analises de código/identação de seus pacotes adicionados. 
     Ex: composer test / composer phan / composer phpcs
 
+    > No arquivo composer.json podem ser criados os 'scripts' 
+        ...
+        "scripts": {
+            "test": "phpunit tests\\testesBuscadorDeCursos.php",
+            "cs" : "phpcs --standard=PSR12 src/",
+            "phan" : "phan --alow-polyfill-parser"
+        }
+
+        Assim podendo ser automatizado os códigos da verificação com os pacotes
+
+    > Pode ser utilizado também um script para executar outros scripts criados
+        ...
+        "scripts": {
+            "test": "phpunit tests\\testesBuscadorDeCursos.php",
+            "cs" : "phpcs --standard=PSR12 src/",
+            "phan" : "phan --alow-polyfill-parser",
+            "check" : [
+                "@test",
+                "@cs",
+                "@phan"
+            ]
+        }
+
+        Apenas utilizar o '@' antes da chamada do script, pode ser aberto chaves para criar um array de comandos.
+
+    > Podemos adicionar descrições específicas aos nossos scripts - listamos todos os comandos via código: 
+        composer list
+        ...
+        "scripts-descriptions": {
+            "check": "Executa analise nos códigos via: PHPUnit, PHPCS, PHAN"
+        }
+
+    > Pode ser executado qualquer comando via criação de scripts com o comando do composer 'nome do script criado' 
+
+    De acordo com a documentação do composer - scripts 
+    https://getcomposer.org/doc/articles/scripts.md
+        
+        > Podem ser adicionado scripts com nomes já pre definidos, onde executaram rotinas baseadas nessas pré definições.
+            Ex: "post-update-cmd"
+
+            "scripts": {
+                "test": "phpunit tests\\TestBuscadorDeCursos.php",
+                
+                "post-update-cmd": [
+                    "@test"
+                ]
+            }
+        
+            Dessa forma, executando o compando 'Composer update' - será executado pós finalização do update o script 'test' incluído no composer.json
+
 
 */

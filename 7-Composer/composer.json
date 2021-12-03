@@ -29,5 +29,25 @@
         "phpunit/phpunit": "8",
         "squizlabs/php_codesniffer": "^3.6",
         "phan/phan": "^5.3"
+    },
+
+    "scripts": {
+        "test": "phpunit tests\\testesBuscadorDeCursos.php",
+        "cs" : "phpcs --standard=PSR12 src/",
+        "phan" : "phan --alow-polyfill-parser",
+        "check": [
+            "@phan",
+            "@cs",
+            "@test"
+        ],
+     
+        "post-update-cmd": [
+            "@test"
+        ]
+    
+    }, 
+
+    "scripts-descriptions": {
+        "check": "Executa analise nos códigos via: PHPUnit, PHPCS, PHAN"
     }
 }
