@@ -1,16 +1,34 @@
 <?php
 
-require_once 'vendor/autoload.php';
-
 use Alura\Pdo\Domain\Model\Student;
 
-$dataBasePath = __DIR__ . '/banco.sqlite';
+require_once 'vendor/autoload.php';
 
-$pdo = new PDO('sqlite:' . $dataBasePath);
+$databasePath = __DIR__ . '/banco.sqlite';
+$pdo = new PDO('sqlite:' . $databasePath);
 
-$student = new Student(null,'Aluno Teste', new \DateTimeImmutable('1999-12-10'));
+$student = new Student(
+    null,
+    "Vinicius', ''); DROP TABLE students; -- Dias",
+    new \DateTimeImmutable('1997-10-15'));
 
-$sqlInsert = "INSERT INTO students (name, birth_date) VALUES ('{$student->name()}', '{$student->birthDate()->format('Y-m-d')}');";
+//Controle do SQL Injection maliciosos
+//pode ser utilizado nos parâmetros do Values o 'Nome do Parâmetro' ou a '?'
+/*
+$sqlInsert = "INSERT INTO students (name, birth_date) VALUES (?, ?);";
+*/
+$sqlInsert = "INSERT INTO students (name, birth_date) VALUES (:name, :birth_date);";
+$statement = $pdo->prepare($sqlInsert);
+$statement->bindValue(':name', $student->name());
+$statement->bindValue(':birth_date', $student->birthDate()->format('Y-m-d'));
+
+/* o Uso do 'bindParam' faz com que seja anexado o endereço da variável utilizada e não os dados que a compõem no momento repassado. */
+
+if ($statement->execute()) {
+    echo "Aluno incluído";
+}
+
+exit();
 
 var_dump($pdo->exec($sqlInsert));
 
