@@ -1,7 +1,6 @@
 <?php
 
-$caminhoBanco = __DIR__ . '/banco.sqlite';
-$pdo = new PDO('sqlite:' . $caminhoBanco);
+$pdo = \Alura\Pdo\Infrastructure\Persistence\ConnectionCreator::createConnection();
 
 echo 'Conectei';
 
