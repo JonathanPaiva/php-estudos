@@ -1,16 +1,18 @@
 <?php
 
+namespace Alura\Pdo\Infrastructure\Repository;
+
 use Alura\Pdo\Domain\Model\Student;
-use Alura\PDO\Domain\Repository\StudentRepository;
-use Alura\Pdo\Infrastructure\Persistence\ConnectionCreator;
+use Alura\Pdo\Domain\Repository\StudentRepository;
 use PDO;
 
 class PdoStudentRepository implements StudentRepository
 {
+    private PDO $connection;
 
-    public function __construct()
+    public function __construct(PDO $connection)
     {
-        $this->connection = ConnectionCreator::createConnection();
+        $this->connection = $connection;
     }
 
     public function allStudents(): array
@@ -56,9 +58,9 @@ class PdoStudentRepository implements StudentRepository
         return $this->update($student);
     }
 
-    public function insert(Student $student): bool
+    private function insert(Student $student): bool
     {
-        $insertQuery = 'INSERT INTO students (name birth_date) VALUES (:name, :birth_date);';
+        $insertQuery = 'INSERT INTO students (name, birth_date) VALUES (:name, :birth_date);';
         $stmt = $this->connection->prepare($insertQuery);
 
         $success = $stmt->execute([
@@ -66,12 +68,14 @@ class PdoStudentRepository implements StudentRepository
             ':birth_date' => $student->birthDate()->format('Y-m-d'),
         ]);
 
-        $student->defineId($this->connection->lasInsertId());
+        if ($success) {
+            $student->defineId($this->connection->lastInsertId());
+        }
 
         return $success;
     }
 
-    public function update(Student $student): bool
+    private function update(Student $student): bool
     {
         $updateQuery = 'UPDATE students SET name = :name, birth_date = :birth_date WHERE id = :id;';
         $stmt = $this->connection->prepare($updateQuery);
@@ -85,7 +89,7 @@ class PdoStudentRepository implements StudentRepository
     public function remove(Student $student): bool
     {
         $stmt = $this->connection->prepare('DELETE FROM students WHERE id = ?;');
-        $stmt->bindValue( 1, $student->id(), PDO::PARAM_INT);
+        $stmt->bindValue(1, $student->id(), PDO::PARAM_INT);
 
         return $stmt->execute();
     }
