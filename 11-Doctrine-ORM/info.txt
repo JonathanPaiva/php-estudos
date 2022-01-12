@@ -1,0 +1,12 @@
+Para uso do composer autoload necessário configura de acordo, utilizando o namespace dado ao projeto
+
+para confirmação das rotinas do composer, pode ser rodado um comando via - linha de comando para criar o arquivo autoload do projeto.
+
+'composer dumpautolad'
+
+    ...
+    "autoload": {
+        "psr-4": {
+            "Alura\\Doctrine\\":"src/"
+        }
+    }
