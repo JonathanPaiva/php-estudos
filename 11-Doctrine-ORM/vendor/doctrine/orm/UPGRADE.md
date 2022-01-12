@@ -1,3 +1,56 @@
+# Upgrade to 2.11
+
+## Rename `AbstractIdGenerator::generate()` to `generateId()`
+
+Implementations of `AbstractIdGenerator` have to override the method
+`generateId()` without calling the parent implementation. Not doing so is
+deprecated. Calling `generate()` on any `AbstractIdGenerator` implementation
+is deprecated.
+
+## PSR-6-based second level cache
+
+The second level cache has been reworked to consume a PSR-6 cache. Using a
+Doctrine Cache instance is deprecated.
+
+* `DefaultCacheFactory`: The constructor expects a PSR-6 cache item pool as
+  second argument now.
+* `DefaultMultiGetRegion`: This class is deprecated in favor of `DefaultRegion`.
+* `DefaultRegion`:
+  * The constructor expects a PSR-6 cache item pool as second argument now.
+  * The protected `$cache` property is deprecated.
+  * The properties `$name` and `$lifetime` as well as the constant
+   `REGION_KEY_SEPARATOR` and the method `getCacheEntryKey()` are flagged as
+   `@internal` now. They all will become `private` in 3.0.
+  * The method `getCache()` is deprecated without replacement.
+
+## Deprecated: `Doctrine\ORM\Mapping\Driver\PHPDriver`
+
+Use `StaticPHPDriver` instead when you want to programmatically configure
+entity metadata.
+
+You can convert mappings with the `orm:convert-mapping` command or more simply
+in this case, `include` the metadata file from the `loadMetadata` static method
+used by the `StaticPHPDriver`.
+
+## Deprecated: `Setup::registerAutoloadDirectory()`
+
+Use Composer's autoloader instead.
+
+## Deprecated: `AbstractHydrator::hydrateRow()`
+
+Following the deprecation of the method `AbstractHydrator::iterate()`, the
+method `hydrateRow()` has been deprecated as well.
+
+## Deprecate cache settings inspection
+
+Doctrine does not provide its own cache implementation anymore and relies on
+the PSR-6 standard instead. As a consequence, we cannot determine anymore
+whether a given cache adapter is suitable for a production environment.
+Because of that, functionality that aims to do so has been deprecated:
+
+* `Configuration::ensureProductionSettings()`
+* the `orm:ensure-production-settings` console command
+
 # Upgrade to 2.10
 
 ## BC Break: `UnitOfWork` now relies on SPL object IDs, not hashes
@@ -182,8 +235,7 @@ These methods have been deprecated:
 ## Deprecated `Doctrine\ORM\Version`
 
 The `Doctrine\ORM\Version` class is now deprecated and will be removed in Doctrine ORM 3.0:
-please refrain from checking the ORM version at runtime or use
-[ocramius/package-versions](https://github.com/Ocramius/PackageVersions/).
+please refrain from checking the ORM version at runtime or use Composer's [runtime API](https://getcomposer.org/doc/07-runtime.md#knowing-whether-package-x-is-installed-in-version-y).
 
 ## Deprecated `EntityManager#merge()` method
 

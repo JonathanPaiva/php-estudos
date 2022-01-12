@@ -5,7 +5,7 @@
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '2b3b43207bb2ee1327cfc9785a3ef2c155a3da24',
+        'reference' => '687846b6add9dfd7fd607d5c1f7ad766bd20bbf5',
         'name' => '__root__',
         'dev' => true,
     ),
@@ -16,7 +16,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '2b3b43207bb2ee1327cfc9785a3ef2c155a3da24',
+            'reference' => '687846b6add9dfd7fd607d5c1f7ad766bd20bbf5',
             'dev_requirement' => false,
         ),
         'composer/package-versions-deprecated' => array(
@@ -26,6 +26,15 @@
             'install_path' => __DIR__ . '/./package-versions-deprecated',
             'aliases' => array(),
             'reference' => 'b174585d1fe49ceed21928a945138948cb394600',
+            'dev_requirement' => false,
+        ),
+        'doctrine/annotations' => array(
+            'pretty_version' => '1.13.2',
+            'version' => '1.13.2.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../doctrine/annotations',
+            'aliases' => array(),
+            'reference' => '5b668aef16090008790395c02c893b1ba13f7e08',
             'dev_requirement' => false,
         ),
         'doctrine/cache' => array(
@@ -101,21 +110,21 @@
             'dev_requirement' => false,
         ),
         'doctrine/lexer' => array(
-            'pretty_version' => '1.2.1',
-            'version' => '1.2.1.0',
+            'pretty_version' => '1.2.2',
+            'version' => '1.2.2.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../doctrine/lexer',
             'aliases' => array(),
-            'reference' => 'e864bbf5904cb8f5bb334f99209b48018522f042',
+            'reference' => '9c50f840f257bbb941e6f4a0e94ccf5db5c3f76c',
             'dev_requirement' => false,
         ),
         'doctrine/orm' => array(
-            'pretty_version' => '2.10.4',
-            'version' => '2.10.4.0',
+            'pretty_version' => '2.11.0',
+            'version' => '2.11.0.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../doctrine/orm',
             'aliases' => array(),
-            'reference' => 'cccb2e2fdfed2969afb3d65c5ea82bafdefbe1a7',
+            'reference' => 'bfed8cb6ed448f4ab1ea3fff06e4d6c44439e4ef',
             'dev_requirement' => false,
         ),
         'doctrine/persistence' => array(
@@ -142,6 +151,12 @@
             'reference' => 'd11b50ad223250cf17b86e38383413f5a6764bf8',
             'dev_requirement' => false,
         ),
+        'psr/cache-implementation' => array(
+            'dev_requirement' => false,
+            'provided' => array(
+                0 => '1.0|2.0',
+            ),
+        ),
         'psr/container' => array(
             'pretty_version' => '1.1.2',
             'version' => '1.1.2.0',
@@ -161,6 +176,36 @@
             'dev_requirement' => false,
         ),
         'psr/log-implementation' => array(
+            'dev_requirement' => false,
+            'provided' => array(
+                0 => '1.0|2.0',
+            ),
+        ),
+        'psr/simple-cache-implementation' => array(
+            'dev_requirement' => false,
+            'provided' => array(
+                0 => '1.0|2.0',
+            ),
+        ),
+        'symfony/cache' => array(
+            'pretty_version' => 'v5.4.2',
+            'version' => '5.4.2.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../symfony/cache',
+            'aliases' => array(),
+            'reference' => '8aad4b69a10c5c51ab54672e78995860f5e447ec',
+            'dev_requirement' => false,
+        ),
+        'symfony/cache-contracts' => array(
+            'pretty_version' => 'v2.5.0',
+            'version' => '2.5.0.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../symfony/cache-contracts',
+            'aliases' => array(),
+            'reference' => 'ac2e168102a2e06a2624f0379bde94cd5854ced2',
+            'dev_requirement' => false,
+        ),
+        'symfony/cache-implementation' => array(
             'dev_requirement' => false,
             'provided' => array(
                 0 => '1.0|2.0',
@@ -263,6 +308,15 @@
             'install_path' => __DIR__ . '/../symfony/string',
             'aliases' => array(),
             'reference' => 'e6a5d5ecf6589c5247d18e0e74e30b11dfd51a3d',
+            'dev_requirement' => false,
+        ),
+        'symfony/var-exporter' => array(
+            'pretty_version' => 'v5.4.2',
+            'version' => '5.4.2.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../symfony/var-exporter',
+            'aliases' => array(),
+            'reference' => '2360c8525815b8535caac27cbc1994e2fa8644ba',
             'dev_requirement' => false,
         ),
     ),

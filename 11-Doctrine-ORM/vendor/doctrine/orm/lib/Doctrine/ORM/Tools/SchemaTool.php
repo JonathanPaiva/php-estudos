@@ -129,7 +129,8 @@ class SchemaTool
         return isset($processedClasses[$class->name]) ||
             $class->isMappedSuperclass ||
             $class->isEmbeddedClass ||
-            ($class->isInheritanceTypeSingleTable() && $class->name !== $class->rootEntityName);
+            ($class->isInheritanceTypeSingleTable() && $class->name !== $class->rootEntityName) ||
+            in_array($class->name, $this->em->getConfiguration()->getSchemaIgnoreClasses());
     }
 
     /**
@@ -191,7 +192,6 @@ class SchemaTool
         $eventManager         = $this->em->getEventManager();
         $metadataSchemaConfig = $this->schemaManager->createSchemaConfig();
 
-        $metadataSchemaConfig->setExplicitForeignKeyIndexes(false);
         $schema = new Schema([], [], $metadataSchemaConfig);
 
         $addedFks       = [];
@@ -930,8 +930,13 @@ class SchemaTool
         $toSchema   = $this->getSchemaFromMetadata($classes);
         $fromSchema = $this->createSchemaForComparison($toSchema);
 
-        $comparator = new Comparator();
-        $schemaDiff = $comparator->compare($fromSchema, $toSchema);
+        if (method_exists($this->schemaManager, 'createComparator')) {
+            $comparator = $this->schemaManager->createComparator();
+        } else {
+            $comparator = new Comparator();
+        }
+
+        $schemaDiff = $comparator->compareSchemas($fromSchema, $toSchema);
 
         if ($saveMode) {
             return $schemaDiff->toSaveSql($this->platform);

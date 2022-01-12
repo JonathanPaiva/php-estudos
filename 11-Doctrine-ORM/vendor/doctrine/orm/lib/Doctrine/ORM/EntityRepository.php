@@ -8,13 +8,13 @@ use BadMethodCallException;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\Selectable;
+use Doctrine\DBAL\LockMode;
 use Doctrine\Deprecations\Deprecation;
 use Doctrine\Inflector\Inflector;
 use Doctrine\Inflector\InflectorFactory;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Query\ResultSetMappingBuilder;
 use Doctrine\ORM\Repository\Exception\InvalidMagicMethodCall;
-use Doctrine\ORM\Repository\InvalidFindByCall;
 use Doctrine\Persistence\ObjectRepository;
 
 use function array_slice;
@@ -39,7 +39,7 @@ class EntityRepository implements ObjectRepository, Selectable
     /** @var string */
     protected $_entityName;
 
-    /** @var EntityManager */
+    /** @var EntityManagerInterface */
     protected $_em;
 
     /** @var ClassMetadata */
@@ -165,6 +165,7 @@ class EntityRepository implements ObjectRepository, Selectable
      *                              or NULL if no specific lock mode should be used
      *                              during the search.
      * @param int|null $lockVersion The lock version.
+     * @psalm-param LockMode::*|null $lockMode
      *
      * @return object|null The entity instance or NULL if the entity can not be found.
      * @psalm-return ?T
@@ -281,7 +282,7 @@ class EntityRepository implements ObjectRepository, Selectable
     }
 
     /**
-     * @return EntityManager
+     * @return EntityManagerInterface
      */
     protected function getEntityManager()
     {

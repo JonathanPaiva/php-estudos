@@ -25,6 +25,7 @@ use Doctrine\ORM\Exception\NamedNativeQueryNotFound;
 use Doctrine\ORM\Exception\NamedQueryNotFound;
 use Doctrine\ORM\Exception\ProxyClassesAlwaysRegenerating;
 use Doctrine\ORM\Exception\UnknownEntityNamespace;
+use Doctrine\ORM\Internal\Hydration\AbstractHydrator;
 use Doctrine\ORM\Mapping\ClassMetadataFactory;
 use Doctrine\ORM\Mapping\DefaultEntityListenerResolver;
 use Doctrine\ORM\Mapping\DefaultNamingStrategy;
@@ -256,7 +257,7 @@ class Configuration extends \Doctrine\DBAL\Configuration
      */
     public function getResultCache(): ?CacheItemPoolInterface
     {
-        // Compatibility with DBAL < 3.2
+        // Compatibility with DBAL 2
         if (! method_exists(parent::class, 'getResultCache')) {
             $cacheImpl = $this->getResultCacheImpl();
 
@@ -271,7 +272,7 @@ class Configuration extends \Doctrine\DBAL\Configuration
      */
     public function setResultCache(CacheItemPoolInterface $cache): void
     {
-        // Compatibility with DBAL < 3.2
+        // Compatibility with DBAL 2
         if (! method_exists(parent::class, 'setResultCache')) {
             $this->setResultCacheImpl(DoctrineProvider::wrap($cache));
 
@@ -510,6 +511,8 @@ class Configuration extends \Doctrine\DBAL\Configuration
      * Ensures that this Configuration instance contains settings that are
      * suitable for a production environment.
      *
+     * @deprecated
+     *
      * @return void
      *
      * @throws ProxyClassesAlwaysRegenerating
@@ -518,6 +521,13 @@ class Configuration extends \Doctrine\DBAL\Configuration
      */
     public function ensureProductionSettings()
     {
+        Deprecation::triggerIfCalledFromOutside(
+            'doctrine/orm',
+            'https://github.com/doctrine/orm/pull/9074',
+            '%s is deprecated',
+            __METHOD__
+        );
+
         $queryCacheImpl = $this->getQueryCacheImpl();
 
         if (! $queryCacheImpl) {
@@ -703,7 +713,7 @@ class Configuration extends \Doctrine\DBAL\Configuration
     /**
      * Sets the custom hydrator modes in one pass.
      *
-     * @param array<string, class-string> $modes An array of ($modeName => $hydrator).
+     * @param array<string, class-string<AbstractHydrator>> $modes An array of ($modeName => $hydrator).
      *
      * @return void
      */
@@ -722,7 +732,7 @@ class Configuration extends \Doctrine\DBAL\Configuration
      * @param string $modeName The hydration mode name.
      *
      * @return string|null The hydrator class name.
-     * @psalm-return ?class-string
+     * @psalm-return class-string<AbstractHydrator>|null
      */
     public function getCustomHydrationMode($modeName)
     {
@@ -734,7 +744,7 @@ class Configuration extends \Doctrine\DBAL\Configuration
      *
      * @param string $modeName The hydration mode name.
      * @param string $hydrator The hydrator class name.
-     * @psalm-param class-string $hydrator
+     * @psalm-param class-string<AbstractHydrator> $hydrator
      *
      * @return void
      */
@@ -1002,5 +1012,25 @@ class Configuration extends \Doctrine\DBAL\Configuration
     public function setDefaultQueryHint($name, $value)
     {
         $this->_attributes['defaultQueryHints'][$name] = $value;
+    }
+
+    /**
+     * Gets a list of entity class names to be ignored by the SchemaTool
+     *
+     * @return list<class-string>
+     */
+    public function getSchemaIgnoreClasses(): array
+    {
+        return $this->_attributes['schemaIgnoreClasses'] ?? [];
+    }
+
+    /**
+     * Sets a list of entity class names to be ignored by the SchemaTool
+     *
+     * @param list<class-string> $schemaIgnoreClasses List of entity class names
+     */
+    public function setSchemaIgnoreClasses(array $schemaIgnoreClasses): void
+    {
+        $this->_attributes['schemaIgnoreClasses'] = $schemaIgnoreClasses;
     }
 }

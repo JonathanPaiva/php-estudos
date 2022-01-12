@@ -800,6 +800,9 @@ class XmlDriver extends FileDriver
       *                   scale?: int,
       *                   unique?: bool,
       *                   nullable?: bool,
+      *                   notInsertable?: bool,
+      *                   notUpdatable?: bool,
+      *                   enumType?: string,
       *                   version?: bool,
       *                   columnDefinition?: string,
       *                   options?: array
@@ -839,12 +842,28 @@ class XmlDriver extends FileDriver
             $mapping['nullable'] = $this->evaluateBoolean($fieldMapping['nullable']);
         }
 
+        if (isset($fieldMapping['insertable']) && ! $this->evaluateBoolean($fieldMapping['insertable'])) {
+            $mapping['notInsertable'] = true;
+        }
+
+        if (isset($fieldMapping['updatable']) && ! $this->evaluateBoolean($fieldMapping['updatable'])) {
+            $mapping['notUpdatable'] = true;
+        }
+
+        if (isset($fieldMapping['generated'])) {
+            $mapping['generated'] = constant('Doctrine\ORM\Mapping\ClassMetadata::GENERATED_' . (string) $fieldMapping['generated']);
+        }
+
         if (isset($fieldMapping['version']) && $fieldMapping['version']) {
             $mapping['version'] = $this->evaluateBoolean($fieldMapping['version']);
         }
 
         if (isset($fieldMapping['column-definition'])) {
             $mapping['columnDefinition'] = (string) $fieldMapping['column-definition'];
+        }
+
+        if (isset($fieldMapping['enum-type'])) {
+            $mapping['enumType'] = (string) $fieldMapping['enum-type'];
         }
 
         if (isset($fieldMapping->options)) {

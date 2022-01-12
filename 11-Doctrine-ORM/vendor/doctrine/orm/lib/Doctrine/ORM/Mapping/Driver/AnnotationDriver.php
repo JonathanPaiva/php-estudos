@@ -5,14 +5,10 @@ declare(strict_types=1);
 namespace Doctrine\ORM\Mapping\Driver;
 
 use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Annotations\Reader;
-use Doctrine\DBAL\Types\Type;
-use Doctrine\ORM\Annotation;
-use Doctrine\ORM\Cache\Exception\CacheException;
 use Doctrine\ORM\Events;
-use Doctrine\ORM\Id\TableGenerator;
 use Doctrine\ORM\Mapping;
 use Doctrine\ORM\Mapping\Builder\EntityListenerBuilder;
+use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\ORM\Mapping\MappingException;
 use Doctrine\Persistence\Mapping\ClassMetadata;
 use Doctrine\Persistence\Mapping\Driver\AnnotationDriver as AbstractAnnotationDriver;
@@ -21,6 +17,7 @@ use ReflectionMethod;
 use ReflectionProperty;
 use UnexpectedValueException;
 
+use function assert;
 use function class_exists;
 use function constant;
 use function count;
@@ -48,29 +45,25 @@ class AnnotationDriver extends AbstractAnnotationDriver
      */
     public function loadMetadataForClass($className, ClassMetadata $metadata)
     {
-        $class = $metadata->getReflectionClass();
-
-        if (! $class) {
+        assert($metadata instanceof Mapping\ClassMetadata);
+        $class = $metadata->getReflectionClass()
             // this happens when running annotation driver in combination with
             // static reflection services. This is not the nicest fix
-            $class = new ReflectionClass($metadata->name);
-        }
+            ?? new ReflectionClass($metadata->name);
 
         $classAnnotations = $this->reader->getClassAnnotations($class);
-
-        if ($classAnnotations) {
-            foreach ($classAnnotations as $key => $annot) {
-                if (! is_numeric($key)) {
-                    continue;
-                }
-
-                $classAnnotations[get_class($annot)] = $annot;
+        foreach ($classAnnotations as $key => $annot) {
+            if (! is_numeric($key)) {
+                continue;
             }
+
+            $classAnnotations[get_class($annot)] = $annot;
         }
 
         // Evaluate Entity annotation
         if (isset($classAnnotations[Mapping\Entity::class])) {
             $entityAnnot = $classAnnotations[Mapping\Entity::class];
+            assert($entityAnnot instanceof Mapping\Entity);
             if ($entityAnnot->repositoryClass !== null) {
                 $metadata->setCustomRepositoryClass($entityAnnot->repositoryClass);
             }
@@ -80,6 +73,7 @@ class AnnotationDriver extends AbstractAnnotationDriver
             }
         } elseif (isset($classAnnotations[Mapping\MappedSuperclass::class])) {
             $mappedSuperclassAnnot = $classAnnotations[Mapping\MappedSuperclass::class];
+            assert($mappedSuperclassAnnot instanceof Mapping\MappedSuperclass);
 
             $metadata->setCustomRepositoryClass($mappedSuperclassAnnot->repositoryClass);
             $metadata->isMappedSuperclass = true;
@@ -91,87 +85,84 @@ class AnnotationDriver extends AbstractAnnotationDriver
 
         // Evaluate Table annotation
         if (isset($classAnnotations[Mapping\Table::class])) {
-            $tableAnnot   = $classAnnotations[Mapping\Table::class];
+            $tableAnnot = $classAnnotations[Mapping\Table::class];
+            assert($tableAnnot instanceof Mapping\Table);
             $primaryTable = [
                 'name'   => $tableAnnot->name,
                 'schema' => $tableAnnot->schema,
             ];
 
-            if ($tableAnnot->indexes !== null) {
-                foreach ($tableAnnot->indexes as $indexAnnot) {
-                    $index = [];
+            foreach ($tableAnnot->indexes ?? [] as $indexAnnot) {
+                $index = [];
 
-                    if (! empty($indexAnnot->columns)) {
-                        $index['columns'] = $indexAnnot->columns;
-                    }
+                if (! empty($indexAnnot->columns)) {
+                    $index['columns'] = $indexAnnot->columns;
+                }
 
-                    if (! empty($indexAnnot->fields)) {
-                        $index['fields'] = $indexAnnot->fields;
-                    }
+                if (! empty($indexAnnot->fields)) {
+                    $index['fields'] = $indexAnnot->fields;
+                }
 
-                    if (
-                        isset($index['columns'], $index['fields'])
-                        || (
-                            ! isset($index['columns'])
-                            && ! isset($index['fields'])
-                        )
-                    ) {
-                        throw MappingException::invalidIndexConfiguration(
-                            $className,
-                            (string) ($indexAnnot->name ?? count($primaryTable['indexes']))
-                        );
-                    }
+                if (
+                    isset($index['columns'], $index['fields'])
+                    || (
+                        ! isset($index['columns'])
+                        && ! isset($index['fields'])
+                    )
+                ) {
+                    throw MappingException::invalidIndexConfiguration(
+                        $className,
+                        (string) ($indexAnnot->name ?? count($primaryTable['indexes']))
+                    );
+                }
 
-                    if (! empty($indexAnnot->flags)) {
-                        $index['flags'] = $indexAnnot->flags;
-                    }
+                if (! empty($indexAnnot->flags)) {
+                    $index['flags'] = $indexAnnot->flags;
+                }
 
-                    if (! empty($indexAnnot->options)) {
-                        $index['options'] = $indexAnnot->options;
-                    }
+                if (! empty($indexAnnot->options)) {
+                    $index['options'] = $indexAnnot->options;
+                }
 
-                    if (! empty($indexAnnot->name)) {
-                        $primaryTable['indexes'][$indexAnnot->name] = $index;
-                    } else {
-                        $primaryTable['indexes'][] = $index;
-                    }
+                if (! empty($indexAnnot->name)) {
+                    $primaryTable['indexes'][$indexAnnot->name] = $index;
+                } else {
+                    $primaryTable['indexes'][] = $index;
                 }
             }
 
-            if ($tableAnnot->uniqueConstraints !== null) {
-                foreach ($tableAnnot->uniqueConstraints as $uniqueConstraintAnnot) {
-                    $uniqueConstraint = [];
+            foreach ($tableAnnot->uniqueConstraints ?? [] as $uniqueConstraintAnnot) {
+                $uniqueConstraint = [];
 
-                    if (! empty($uniqueConstraintAnnot->columns)) {
-                        $uniqueConstraint['columns'] = $uniqueConstraintAnnot->columns;
-                    }
+                if (! empty($uniqueConstraintAnnot->columns)) {
+                    $uniqueConstraint['columns'] = $uniqueConstraintAnnot->columns;
+                }
 
-                    if (! empty($uniqueConstraintAnnot->fields)) {
-                        $uniqueConstraint['fields'] = $uniqueConstraintAnnot->fields;
-                    }
+                if (! empty($uniqueConstraintAnnot->fields)) {
+                    $uniqueConstraint['fields'] = $uniqueConstraintAnnot->fields;
+                }
 
-                    if (
-                        isset($uniqueConstraint['columns'], $uniqueConstraint['fields'])
-                        || (
-                            ! isset($uniqueConstraint['columns'])
-                            && ! isset($uniqueConstraint['fields'])
-                        )
-                    ) {
-                        throw MappingException::invalidUniqueConstraintConfiguration(
-                            $className,
-                            (string) ($uniqueConstraintAnnot->name ?? count($primaryTable['uniqueConstraints']))
-                        );
-                    }
+                if (
+                    isset($uniqueConstraint['columns'], $uniqueConstraint['fields'])
+                    || (
+                        ! isset($uniqueConstraint['columns'])
+                        && ! isset($uniqueConstraint['fields'])
+                    )
+                ) {
+                    throw MappingException::invalidUniqueConstraintConfiguration(
+                        $className,
+                        (string) ($uniqueConstraintAnnot->name ?? count($primaryTable['uniqueConstraints']))
+                    );
+                }
 
-                    if (! empty($uniqueConstraintAnnot->options)) {
-                        $uniqueConstraint['options'] = $uniqueConstraintAnnot->options;
-                    }
+                if (! empty($uniqueConstraintAnnot->options)) {
+                    $uniqueConstraint['options'] = $uniqueConstraintAnnot->options;
+                }
 
-                    if (! empty($uniqueConstraintAnnot->name)) {
-                        $primaryTable['uniqueConstraints'][$uniqueConstraintAnnot->name] = $uniqueConstraint;
-                    } else {
-                        $primaryTable['uniqueConstraints'][] = $uniqueConstraint;
-                    }
+                if (! empty($uniqueConstraintAnnot->name)) {
+                    $primaryTable['uniqueConstraints'][$uniqueConstraintAnnot->name] = $uniqueConstraint;
+                } else {
+                    $primaryTable['uniqueConstraints'][] = $uniqueConstraint;
                 }
             }
 
@@ -274,15 +265,17 @@ class AnnotationDriver extends AbstractAnnotationDriver
         // Evaluate InheritanceType annotation
         if (isset($classAnnotations[Mapping\InheritanceType::class])) {
             $inheritanceTypeAnnot = $classAnnotations[Mapping\InheritanceType::class];
+            assert($inheritanceTypeAnnot instanceof Mapping\InheritanceType);
 
             $metadata->setInheritanceType(
                 constant('Doctrine\ORM\Mapping\ClassMetadata::INHERITANCE_TYPE_' . $inheritanceTypeAnnot->value)
             );
 
-            if ($metadata->inheritanceType !== Mapping\ClassMetadata::INHERITANCE_TYPE_NONE) {
+            if ($metadata->inheritanceType !== ClassMetadataInfo::INHERITANCE_TYPE_NONE) {
                 // Evaluate DiscriminatorColumn annotation
                 if (isset($classAnnotations[Mapping\DiscriminatorColumn::class])) {
                     $discrColumnAnnot = $classAnnotations[Mapping\DiscriminatorColumn::class];
+                    assert($discrColumnAnnot instanceof Mapping\DiscriminatorColumn);
 
                     $metadata->setDiscriminatorColumn(
                         [
@@ -299,6 +292,7 @@ class AnnotationDriver extends AbstractAnnotationDriver
                 // Evaluate DiscriminatorMap annotation
                 if (isset($classAnnotations[Mapping\DiscriminatorMap::class])) {
                     $discrMapAnnot = $classAnnotations[Mapping\DiscriminatorMap::class];
+                    assert($discrMapAnnot instanceof Mapping\DiscriminatorMap);
                     $metadata->setDiscriminatorMap($discrMapAnnot->value);
                 }
             }
@@ -307,6 +301,7 @@ class AnnotationDriver extends AbstractAnnotationDriver
         // Evaluate DoctrineChangeTrackingPolicy annotation
         if (isset($classAnnotations[Mapping\ChangeTrackingPolicy::class])) {
             $changeTrackingAnnot = $classAnnotations[Mapping\ChangeTrackingPolicy::class];
+            assert($changeTrackingAnnot instanceof Mapping\ChangeTrackingPolicy);
             $metadata->setChangeTrackingPolicy(constant('Doctrine\ORM\Mapping\ClassMetadata::CHANGETRACKING_' . $changeTrackingAnnot->value));
         }
 
@@ -410,8 +405,9 @@ class AnnotationDriver extends AbstractAnnotationDriver
         // Evaluate AssociationOverrides annotation
         if (isset($classAnnotations[Mapping\AssociationOverrides::class])) {
             $associationOverridesAnnot = $classAnnotations[Mapping\AssociationOverrides::class];
+            assert($associationOverridesAnnot instanceof Mapping\AssociationOverrides);
 
-            foreach ($associationOverridesAnnot->value as $associationOverride) {
+            foreach ($associationOverridesAnnot->overrides as $associationOverride) {
                 $override  = [];
                 $fieldName = $associationOverride->name;
 
@@ -462,8 +458,9 @@ class AnnotationDriver extends AbstractAnnotationDriver
         // Evaluate AttributeOverrides annotation
         if (isset($classAnnotations[Mapping\AttributeOverrides::class])) {
             $attributeOverridesAnnot = $classAnnotations[Mapping\AttributeOverrides::class];
+            assert($attributeOverridesAnnot instanceof Mapping\AttributeOverrides);
 
-            foreach ($attributeOverridesAnnot->value as $attributeOverrideAnnot) {
+            foreach ($attributeOverridesAnnot->overrides as $attributeOverrideAnnot) {
                 $attributeOverride = $this->columnToArray($attributeOverrideAnnot->name, $attributeOverrideAnnot->column);
 
                 $metadata->setAttributeOverride($attributeOverrideAnnot->name, $attributeOverride);
@@ -473,6 +470,7 @@ class AnnotationDriver extends AbstractAnnotationDriver
         // Evaluate EntityListeners annotation
         if (isset($classAnnotations[Mapping\EntityListeners::class])) {
             $entityListenersAnnot = $classAnnotations[Mapping\EntityListeners::class];
+            assert($entityListenersAnnot instanceof Mapping\EntityListeners);
 
             foreach ($entityListenersAnnot->value as $item) {
                 $listenerClassName = $metadata->fullyQualifiedClassName($item);
@@ -636,6 +634,22 @@ class AnnotationDriver extends AbstractAnnotationDriver
     }
 
     /**
+     * Attempts to resolve the generated mode.
+     *
+     * @psalm-return ClassMetadataInfo::GENERATED_*
+     *
+     * @throws MappingException If the fetch mode is not valid.
+     */
+    private function getGeneratedMode(string $generatedMode): int
+    {
+        if (! defined('Doctrine\ORM\Mapping\ClassMetadata::GENERATED_' . $generatedMode)) {
+            throw MappingException::invalidGeneratedMode($generatedMode);
+        }
+
+        return constant('Doctrine\ORM\Mapping\ClassMetadata::GENERATED_' . $generatedMode);
+    }
+
+    /**
      * Parses the given method.
      *
      * @return callable[]
@@ -720,6 +734,10 @@ class AnnotationDriver extends AbstractAnnotationDriver
      *                   unique: bool,
      *                   nullable: bool,
      *                   precision: int,
+     *                   notInsertable?: bool,
+     *                   notUpdateble?: bool,
+     *                   generated?: ClassMetadataInfo::GENERATED_*,
+     *                   enumType?: class-string,
      *                   options?: mixed[],
      *                   columnName?: string,
      *                   columnDefinition?: string
@@ -728,14 +746,26 @@ class AnnotationDriver extends AbstractAnnotationDriver
     private function columnToArray(string $fieldName, Mapping\Column $column): array
     {
         $mapping = [
-            'fieldName' => $fieldName,
-            'type'      => $column->type,
-            'scale'     => $column->scale,
-            'length'    => $column->length,
-            'unique'    => $column->unique,
-            'nullable'  => $column->nullable,
-            'precision' => $column->precision,
+            'fieldName'     => $fieldName,
+            'type'          => $column->type,
+            'scale'         => $column->scale,
+            'length'        => $column->length,
+            'unique'        => $column->unique,
+            'nullable'      => $column->nullable,
+            'precision'     => $column->precision,
         ];
+
+        if (! $column->insertable) {
+            $mapping['notInsertable'] = true;
+        }
+
+        if (! $column->updatable) {
+            $mapping['notUpdatable'] = true;
+        }
+
+        if ($column->generated) {
+            $mapping['generated'] = $this->getGeneratedMode($column->generated);
+        }
 
         if ($column->options) {
             $mapping['options'] = $column->options;
@@ -747,6 +777,10 @@ class AnnotationDriver extends AbstractAnnotationDriver
 
         if (isset($column->columnDefinition)) {
             $mapping['columnDefinition'] = $column->columnDefinition;
+        }
+
+        if ($column->enumType !== null) {
+            $mapping['enumType'] = $column->enumType;
         }
 
         return $mapping;

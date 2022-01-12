@@ -228,7 +228,7 @@ abstract class AbstractHydrator
      * Hydrates all rows returned by the passed statement instance at once.
      *
      * @param Result|ResultStatement $stmt
-     * @param object                 $resultSetMapping
+     * @param ResultSetMapping       $resultSetMapping
      * @psalm-param array<string, string> $hints
      *
      * @return mixed[]
@@ -277,10 +277,19 @@ abstract class AbstractHydrator
      * Hydrates a single row returned by the current statement instance during
      * row-by-row hydration with {@link iterate()} or {@link toIterable()}.
      *
+     * @deprecated
+     *
      * @return mixed[]|false
      */
     public function hydrateRow()
     {
+        Deprecation::triggerIfCalledFromOutside(
+            'doctrine/orm',
+            'https://github.com/doctrine/orm/pull/9072',
+            '%s is deprecated.',
+            __METHOD__
+        );
+
         $row = $this->statement()->fetchAssociative();
 
         if ($row === false) {
