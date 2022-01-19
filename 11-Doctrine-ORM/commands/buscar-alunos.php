@@ -20,7 +20,7 @@ $alunoList = $alunoRespository->findAll();
 
 echo "\n Utilizando a captura da lista com todos os registros, baseado no FindAll:\n";
 foreach ($alunoList as $aluno){
-    echo "ID: {$aluno->getId()} -> Nome: {$aluno->getNome()}";
+    echo "ID: {$aluno->getId()} -> Nome: {$aluno->getNome()} \n";
 }
 echo "\n----------------------------------\n\n";
 
