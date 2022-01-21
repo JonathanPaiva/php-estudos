@@ -24,7 +24,7 @@ foreach ($alunoList as $aluno){
 }
 echo "\n----------------------------------\n\n";
 
-
+exit();
 echo "Filtrando um Registro baseado no Find:\n";
 /* Método 'find' pesquisa um objeto específico baseado no ID */
 $filtro1 = $alunoRespository->find(3);

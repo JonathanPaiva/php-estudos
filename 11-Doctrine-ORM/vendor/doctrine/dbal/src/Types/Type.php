@@ -202,7 +202,7 @@ abstract class Type
      * Gets the types array map which holds all registered types and the corresponding
      * type class
      *
-     * @return string[]
+     * @return array<string, string>
      */
     public static function getTypesMap()
     {
@@ -221,6 +221,9 @@ abstract class Type
      * Usage of {@see convertToDatabaseValueSQL} and
      * {@see convertToPHPValueSQL} works for any type and mostly
      * does nothing. This method can additionally be used for optimization purposes.
+     *
+     * @deprecated Consumers should call {@see convertToDatabaseValueSQL} and {@see convertToPHPValueSQL}
+     * regardless of the type.
      *
      * @return bool
      */

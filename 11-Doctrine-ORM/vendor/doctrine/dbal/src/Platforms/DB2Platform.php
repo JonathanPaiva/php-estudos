@@ -95,6 +95,13 @@ class DB2Platform extends AbstractPlatform
      */
     public function isCommentedDoctrineType(Type $doctrineType)
     {
+        Deprecation::trigger(
+            'doctrine/dbal',
+            'https://github.com/doctrine/dbal/pull/5058',
+            '%s is deprecated and will be removed in Doctrine DBAL 4.0. Use Type::requiresSQLCommentHint() instead.',
+            __METHOD__
+        );
+
         if ($doctrineType->getName() === Types::BOOLEAN) {
             // We require a commented boolean type in order to distinguish between boolean and smallint
             // as both (have to) map to the same native type.
@@ -406,14 +413,6 @@ class DB2Platform extends AbstractPlatform
      * {@inheritDoc}
      */
     public function supportsCreateDropDatabase()
-    {
-        return false;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function supportsReleaseSavepoints()
     {
         return false;
     }
@@ -840,9 +839,17 @@ class DB2Platform extends AbstractPlatform
 
     /**
      * {@inheritDoc}
+     *
+     * @deprecated
      */
     public function prefersIdentityColumns()
     {
+        Deprecation::trigger(
+            'doctrine/dbal',
+            'https://github.com/doctrine/dbal/pulls/1519',
+            'DB2Platform::prefersIdentityColumns() is deprecated.'
+        );
+
         return true;
     }
 
