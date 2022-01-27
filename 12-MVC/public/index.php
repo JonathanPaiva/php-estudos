@@ -2,10 +2,6 @@
 
 require __DIR__ . '/../vendor/autoload.php';
 
-use Alura\Cursos\Controler\FormularioInsercao;
-use Alura\Cursos\Controler\ListarCursos;
-use Alura\Cursos\Controler\Persistencia;
-
 $caminho = $_SERVER['PATH_INFO'];
 $rotas = require __DIR__ . '/../config/routes.php';
 

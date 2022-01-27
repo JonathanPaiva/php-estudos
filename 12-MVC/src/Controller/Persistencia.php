@@ -1,6 +1,6 @@
 <?php
 
-namespace Alura\Cursos\Controler;
+namespace Alura\Cursos\Controller;
 
 use Alura\Cursos\Entity\Curso;
 use Alura\Cursos\Infra\EntityManagerCreator;
@@ -24,7 +24,16 @@ class Persistencia implements InterfaceControladorRequisicao
         $curso = new Curso();
         $curso->setDescricao($descricao);
 
-        $this->entityManager->persist($curso);
+        $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+        
+        if (!is_null($id) && $id !== false ) {
+            $curso->setId($id);
+            //comando merge serve para atualizar as informações do curso atual.
+            $this->entityManager->merge($curso);
+        } else {
+            $this->entityManager->persist($curso);
+        }
+
         $this->entityManager->flush();
 
         //comando header redireciona o arquivo para os parâmetros passados com o Location

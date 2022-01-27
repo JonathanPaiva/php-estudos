@@ -1,6 +1,6 @@
 <?php
 
-namespace Alura\Cursos\Controler;
+namespace Alura\Cursos\Controller;
 
 interface InterfaceControladorRequisicao
 {
