@@ -3,10 +3,14 @@
 namespace Alura\Cursos\Controller;
 
 use Alura\Cursos\Entity\Usuario;
+use Alura\Cursos\Helper\FlashMassageTrait;
 use Alura\Cursos\Infra\EntityManagerCreator;
 
 class RealizaLogin implements InterfaceControladorRequisicao
 {
+
+    use FlashMassageTrait;
+
     /*
     Para inclusão de senhas, pode ser utilizado o método de criptografia password_hash do php, passando por parâmetro a senha e o algoritmo
     php > echo password_hash('123456', PASSWORD_ARGON2I);
@@ -30,7 +34,8 @@ class RealizaLogin implements InterfaceControladorRequisicao
         $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
 
         if (is_null($email) || $email ===false) {
-            echo 'Email Inválido';
+            $this->setMensagem('danger','Email Inválido!');
+            header('Location: /login');
             return;
         }
 
@@ -42,9 +47,18 @@ class RealizaLogin implements InterfaceControladorRequisicao
             ->findOneBy(['email' => $email]);
 
         if (is_null($usuario) || !$usuario->senhaEstaCorreta($senha)){
-            echo "Usuário ou Senha Inválidos!";
+            $this->setMensagem('danger','E-mail ou Senha Inválidos!');
+            header('Location: /login');
             return;
         }
+
+        /*informações necessárias para armazenar os dados de login, portanto necessário incluir o start da sessão
+            session_start(); 
+        Sendo chamado no idex.php 
+        utilizando o $_SESSION['logado'] = true; para confirmação do login pelo ususário.
+        */
+        
+        $_SESSION['logado'] = true;
 
         header('Location: /listar-cursos');
         

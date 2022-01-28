@@ -3,10 +3,14 @@
 namespace Alura\Cursos\Controller;
 
 use Alura\Cursos\Entity\Curso;
+use Alura\Cursos\Helper\FlashMassageTrait;
 use Alura\Cursos\Infra\EntityManagerCreator;
 
 class Persistencia implements InterfaceControladorRequisicao
 {
+
+    //o uso da trait da acesso a um pedaço de código contido dentro do arquivo sem precisar instanciar na class com o extends, assim podemos utilizar as funções contidas no arquivo trait normalmente com o $this->funcaoDesejada.
+    use FlashMassageTrait;
 
     private $entityManager;
 
@@ -30,12 +34,15 @@ class Persistencia implements InterfaceControladorRequisicao
             $curso->setId($id);
             //comando merge serve para atualizar as informações do curso atual.
             $this->entityManager->merge($curso);
+            $this->setMensagem('success','Curso Atualizado com Sucesso!');
+
         } else {
             $this->entityManager->persist($curso);
+            $this->setMensagem('success','Curso Adicionado com Sucesso!');
         }
 
         $this->entityManager->flush();
-
+        
         //comando header redireciona o arquivo para os parâmetros passados com o Location
         header('Location: /listar-cursos',true, 302);
     }

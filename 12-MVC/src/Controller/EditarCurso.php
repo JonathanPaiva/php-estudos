@@ -3,10 +3,13 @@
 namespace Alura\Cursos\Controller;
 
 use Alura\Cursos\Entity\Curso;
+use Alura\Cursos\Helper\RenderizaHTMLTrait;
 use Alura\Cursos\Infra\EntityManagerCreator;
 
-class EditarCurso extends ControllerComHTML implements InterfaceControladorRequisicao
+class EditarCurso implements InterfaceControladorRequisicao
 {
+
+    use RenderizaHTMLTrait;
 
     /**
      * @var \Doctrine\Common\Persistence\ObjectRepository
