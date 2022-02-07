@@ -1,5 +1,7 @@
 <?php
 
+namespace Alura\Cursos\Controller;
+
 use Doctrine\ORM\EntityManagerInterface;
 use GuzzleHttp\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
