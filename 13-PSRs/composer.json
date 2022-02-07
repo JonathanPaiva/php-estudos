@@ -7,11 +7,9 @@
     "require": {
         "doctrine/orm": "^2.6",
         "psr/http-message": "^1.0",
-        "nyholm/psr7": "^1.4",
-        "nyholm/psr7-server": "^1.0",
-        "psr/http-factory": "^1.0",
-        "php-http/message-factory": "^1.0",
-        "laminas/laminas-httphandlerrunner": "^2.1",
-        "psr/http-server-handler": "^1.0"
+        "nyholm/psr7": "^1.1",
+        "nyholm/psr7-server": "^0.3.0",
+        "psr/http-server-handler": "^1.0",
+        "php-di/php-di": "^6.0"
     }
 }

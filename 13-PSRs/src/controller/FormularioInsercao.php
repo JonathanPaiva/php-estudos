@@ -1,26 +1,27 @@
 <?php
 
-use Alura\Cursos\Controller\InterfaceControladorRequisicao;
+namespace Alura\Cursos\Controller;
+
+use Alura\Cursos\Helper\RenderizadorDeHtmlTrait;
+use Doctrine\ORM\EntityManagerInterface;
 use Nyholm\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
-class FormularioInsercao implements InterfaceControladorRequisicao
+class FormularioInsercao implements RequestHandlerInterface
 {
+    private $entityManager;
 
-    public function processaRequisicao(ServerRequestInterface $request): ResponseInterface
+    public function __construct(EntityManagerInterface $entityManager) 
     {
-        
-        $html = "Teste";
-
-        $psr17Factory = new \Nyholm\Psr7\Factory\Psr17Factory();
-
-        $responseBody = $psr17Factory->createStream('Hello world');
-        $response = $psr17Factory->createResponse(200)->withBody($responseBody);
-        (new \Laminas\HttpHandlerRunner\Emitter\SapiEmitter())->emit($response);
-
-//        return new Response(200,[],$html);
-        
+        $this-> entityManager = $entityManager;
     }
 
+    public function handle(ServerRequestInterface $request): ResponseInterface
+    {
+        //var_dump($this->entityManager);
+        $html = "teste";
+        return new Response(200, [], $html);
+    }
 }
