@@ -3,5 +3,7 @@ Ao Executar o camando - composer create-project --prefer-dist laravel/laravel co
 apresentou erros nos demais pacotes abaixo.
 
 Package swiftmailer/swiftmailer is abandoned, you should avoid using it. Use symfony/mailer instead.
+
 Package fzaninotto/faker is abandoned, you should avoid using it. No replacement was suggested.
+
 Package phpunit/php-token-stream is abandoned, you should avoid using it. No replacement was suggested.
