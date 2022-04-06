@@ -10,5 +10,7 @@ class Serie extends Model
     protected $tabela = 'series' ;
     
     public $timestamps = false;
+
+    protected $fillable = ['nome'];
     
 }
