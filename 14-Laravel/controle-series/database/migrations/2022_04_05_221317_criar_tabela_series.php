@@ -14,6 +14,7 @@ class CriarTabelaSeries extends Migration
     public function up()
     {
         Schema::create('series', function(Blueprint $tabela) {
+            $tabela->increments('id');
             $tabela->string('nome');
         });
     }

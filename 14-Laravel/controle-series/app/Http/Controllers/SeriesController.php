@@ -5,15 +5,15 @@ namespace App\Http\Controllers;
 use App\Serie;
 use Illuminate\Http\Request;
 
-use function DI\create;
-
 class SeriesController extends Controller
 {
 
     public function index(Request $request)
     {
 
-        $series = Serie::query()->orderBy('nome')->get(); 
+        $series = Serie::query()
+            ->orderBy('nome')
+            ->get(); 
         //var_dump($serie);
 
         /*
@@ -34,7 +34,10 @@ class SeriesController extends Controller
         /* Substituindo uma digitação da forma abaixo:
         ['series' => $series]
         */
-        return view('series.index', compact('series'));
+
+        $mensagem = $request->session()->get('mensagem');
+
+        return view('series.index', compact('series', 'mensagem'));
         
     }
 
@@ -61,8 +64,29 @@ class SeriesController extends Controller
 
         $serie = Serie::create($request->all());
 
-        return redirect('/series');
+        $request->session()
+            ->flash(
+                'mensagem',
+                "Série: {$serie->id} criada com sucesso {$serie->nome}");
 
+        return redirect()->route('series_Listar');
+
+    }
+
+    public function destroy(Request $request)
+    {
+
+        //echo $request->id;
+
+       Serie::destroy($request->id);
+        
+        $request->session()
+        ->flash(
+            'mensagem',
+            "Série Removida com Sucesso!");
+
+        return redirect()->route('series_Listar');
+    
     }
 
 }
